@@ -6,4 +6,4 @@ test.py
 mlartifacts
 mlflow/saved_models 
 mlruns
-mlflow/qwen_config
+
