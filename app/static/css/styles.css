@@ -1,0 +1,74 @@
+body {
+    font-family: "Roboto Mono", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    background-color: #16161a;
+    color: #fffffe;
+}
+
+h1 {
+    opacity: 1;
+    font-family: "Libre Franklin", sans-serif; 
+    font-size: xx-large;
+    font-weight:bold;
+    color: #fffffe;
+    text-align: center;
+}
+
+.container {
+    width: 100%;
+    padding-bottom: 5px;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+  }
+
+  .vertical-container {
+    width: 100%;
+    height: fit-content;
+    display: grid;
+    align-items: center;
+    justify-content:  center;
+  
+  }
+  
+.btn {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: none;
+    background-color: #7f5af0;
+    color: #fffffe;
+    cursor: pointer;
+    font-family: "Roboto Mono", sans-serif;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    font-size: small;
+}
+
+.btn:hover {
+    background-color: #553ba3;
+}
+
+label {
+    font-family: "Roboto Mono", sans-serif;
+  }
+
+
+input {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    font-family: "Roboto Mono", sans-serif;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+a {
+    text-decoration: none;
+}

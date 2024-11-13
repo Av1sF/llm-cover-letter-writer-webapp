@@ -1,10 +1,9 @@
-from flask import Blueprint, request, jsonify, render_template, make_response, redirect, url_for, Response
+from flask import Blueprint, request, render_template, make_response, redirect
 from models.user import Users
 from database.db import db 
 from secure import password_hash
 from secure.jwt_setup import jwt
-from flask_jwt_extended import create_access_token, get_jwt_identity
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import create_access_token
 from flask_jwt_extended import set_access_cookies
 from flask_jwt_extended import unset_jwt_cookies
 import re 
@@ -17,11 +16,6 @@ def getLogin():
     response = render_template('auth/login.html')
     return response
 
-# @authRoute.route('/protected', methods=['GET'])
-# @jwt_required()
-# def getProtected():
-#     return render_template('auth/protected.html')
-
 @authRoute.route('/register', methods=['GET'])
 def getRegisted():
     response = render_template('auth/register.html')
@@ -32,9 +26,15 @@ def getRegisted():
 @authRoute.route('/register', methods=['POST'])
 def createUser():
     msg = "" 
-    email = request.form['email']
-    password = request.form['password']
-    username = request.form['username']
+    code = 200 
+
+    try:
+        email = request.form['email']
+        password = request.form['password']
+        username = request.form['username']
+    except:
+        msg="Form read error."
+        code = 400
 
     # check if the user with the same email exists in our db 
     userExist = Users.query.filter_by(email=email).first()
@@ -42,10 +42,13 @@ def createUser():
 
     if userExist or usernameExist:
         msg = "Email already in use" if not userExist else "Username already in use"
+        code = 400
     elif not re.match(r"^\S+@\S+\.\S+$", email):
         msg = "Please enter a valid email"
+        code = 400
     elif not re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$", password):
         msg = "Please enter a valid password"
+        code = 400
     else:
         # add new user 
         try: 
@@ -54,96 +57,42 @@ def createUser():
             db.session.commit() 
         except: 
             msg = "Unable to create user"
+            code = 500
         
         msg = "Created user successfully"
+        code = 200
 
-    return render_template('auth/register.html', msg=msg)
+    # return msg
+    return render_template('auth/register.html', msg=msg), code
+
+
 # Login user  
 @authRoute.route('/login', methods=['POST'])
 def createLoginToken(): 
-    username = request.form['username']
-    password = request.form['password']
+    code = 200
+    try:
+        username = request.form['username']
+        password = request.form['password']
+    except:
+        return render_template('auth/login.html', msg="Form read error."), 400
 
     # check if the user with the same user exists in our db 
     userExist = Users.query.filter_by(username=username).first()
     if not userExist or not password_hash.verifyPassword(password, userExist.password):
-        return "Username or password is not correct"
+        return render_template('auth/login.html', msg="Username or password is not correct"), 401
     else:
         try:
             response = make_response(redirect('/user/protected'))
             access_token = create_access_token(identity=userExist.id)
             set_access_cookies(response, access_token)
-            return response
+            return response, 200
         except Exception as e:
-            return e
-
-
+            return render_template('auth/login.html', msg="Server error."), 500
 
 # Logout 
 @authRoute.route("/logout", methods=['POST'])
 def unsetTokenLogout():
     response = make_response(redirect('/'))
     unset_jwt_cookies(response)
-    return response
+    return response, 200
 
-# @authRoute.route("/profile", methods=['GET'])
-# @jwt_required()
-# def profile():
-#     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
-#     return render_template('auth/profile.html', username=currentUser.username, email=currentUser.email)
-
-# @authRoute.route("/delete", methods=['DELETE'])
-# @jwt_required()
-# def deleteProfile():
-#     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
-#     response = "user does not exist"
-#     if currentUser:
-#         try:
-#             db.session.delete(currentUser)
-#             db.session.commit()
-#             response = redirect(url_for("user_authentication.getRegisted"), code=303)
-#         except Exception as e:
-#             print(e)
-#             response = make_response("unable to create user")
-#     return response 
-
-# @authRoute.route("/update", methods=['PUT'])
-# @jwt_required()
-# def updateProfile():
-#     currentUser = Users.query.filter_by(id=get_jwt_identity()).first() 
-#     msg = "www" 
-#     if request.method == 'PUT':
-#         formData = request.form
-#         newEmail = formData.get('email')
-#         newUsername = formData.get('username')
-        
-#     # check if the user with the same email exists in our db 
-#     userExist = Users.query.filter_by(email=newEmail).first() \
-#         if not (newEmail == currentUser.email) else None
-#     usernameExist = Users.query.filter_by(username=newUsername).first() \
-#         if not (newUsername == currentUser.username) else None 
-
-#     if userExist or usernameExist:
-#         msg = "Email already in use" if not userExist else "Username already in use"
-#     elif not re.match(r"^\S+@\S+\.\S+$", newEmail):
-#         msg = "Please enter a valid email"
-#     else:
-#         # add new user 
-#         try: 
-#             currentUser.username = newUsername
-#             currentUser.email = newEmail
-#             db.session.commit() 
-#         except: 
-#             msg = "Unable to update user information"
-        
-#         msg = "User information updated"
-#     return make_response(jsonify({"msg":msg}), 200)
-#     # return render_template('auth/profile.html', updateMsg=msg) 
-
-# # Test Protected Route 
-# @authRoute.route("/protected", methods=['GET'])
-# @jwt_required()
-# def protected():
-#     # Access the identity of the current user with get_jwt_identity 
-#     currentUser = get_jwt_identity()
-#     return jsonify(logged_in_as=currentUser), 200 

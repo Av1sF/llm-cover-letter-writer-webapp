@@ -24,27 +24,31 @@ def profile():
 @jwt_required()
 def deleteProfile():
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
-    response = "user does not exist"
+    response = make_response("user does not exist", 400)
     if currentUser:
         try:
-            # db.session.delete(currentUser)
-            # db.session.commit()
-            response = make_response("Success")
+            db.session.delete(currentUser)
+            db.session.commit()
+            response = make_response("Success", 200)
         except Exception as e:
             print(e)
-            # not the right code CORRECT 404 
-            response = make_response("Unable to delete user.", 404)
+            response = make_response("Unable to delete user.", 500)
     return response 
 
 @userRoute.route("/update", methods=['PUT'])
 @jwt_required()
 def updateProfile():
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first() 
-    msg = "www" 
-    if request.method == 'PUT':
-        formData = request.form
-        newEmail = formData.get('email')
-        newUsername = formData.get('username')
+    msg = "" 
+    code = 200
+    try:
+        if request.method == 'PUT':
+            formData = request.form
+            newEmail = formData.get('email')
+            newUsername = formData.get('username')
+    except:
+        msg="Form read error."
+        code = 400
         
     # check if the user with the same email exists in our db 
     userExist = Users.query.filter_by(email=newEmail).first() \
@@ -54,8 +58,10 @@ def updateProfile():
 
     if userExist or usernameExist:
         msg = "Email already in use" if not userExist else "Username already in use"
+        code = 400
     elif not re.match(r"^\S+@\S+\.\S+$", newEmail):
         msg = "Please enter a valid email"
+        code = 400 
     else:
         # add new user 
         try: 
@@ -64,10 +70,10 @@ def updateProfile():
             db.session.commit() 
         except: 
             msg = "Unable to update user information"
+            code = 500
         
-        msg = "User information updated"
-    return make_response(jsonify({"msg":msg}), 200)
-    # return render_template('auth/profile.html', updateMsg=msg) 
+        msg = "User information updated" 
+    return make_response(jsonify({"msg":msg}), code)
 
 # Test Protected Route 
 @userRoute.route("/protected", methods=['GET'])
