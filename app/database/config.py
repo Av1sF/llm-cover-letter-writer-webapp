@@ -1,0 +1,14 @@
+from dotenv import load_dotenv
+import os 
+
+# load .env variables 
+load_dotenv()
+
+DATABASE_HOST=os.getenv("DATABASE_HOST")
+DATABASE_NAME=os.getenv("DATABASE_NAME")
+DATABASE_USER=os.getenv("DATABASE_USER")
+DATABASE_PASSWORD=os.getenv("DATABASE_PASSWORD")
+DATABASE_CONNECTION_URI= f'mysql://{DATABASE_USER}:{DATABASE_PASSWORD}@{DATABASE_HOST}/{DATABASE_NAME}'
+DATABASE_PORT=os.getenv("DATABASE_PORT")
+
+JWT_SECRET_KEY=os.getenv("JWT_SECRET_KEY")

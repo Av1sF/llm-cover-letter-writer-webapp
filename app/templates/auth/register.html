@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+
+<body>
+    <form action="/auth/register" method="POST">
+        <input type="username" name="username" placeholder="Username">
+        {{msg if msg}}
+        <br>
+        <br>
+        <input type="email" name="email" placeholder="Email">
+        <br>
+        <br>
+        Please enter a password with minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character.
+        <input type="password" name="password" placeholder="Password">
+        <br>
+        <br>
+        <input type="submit" value="Register"> 
+
+    </form>
+</body>
+
+</html>
