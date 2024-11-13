@@ -29,7 +29,7 @@
             <br>
             <input class='btn' type="submit" value="Update"> 
         </form>
-        {{updateMsg if updateMsg}}
+        <p id="updateMessage"></p>
         <br>
         <br>
         <p>
@@ -43,6 +43,7 @@
 
 <script>
     const updateForm = document.querySelector("#updateUserInfo")
+    const updateMessage= document.getElementById("updateMessage")
     const deletebtn = document.getElementById("deleteUser")
     const deleteMsg = document.getElementById("deleteMsg")
     function getCookie(name) {
@@ -60,8 +61,10 @@
                 "X-CSRF-TOKEN": getCookie("csrf_access_token"),
                 },
                 body: formData, 
-            });
-            console.log(await response.json());
+            }).then((response) => response.json())
+            .then((data) => {
+                updateMessage.innerHTML = data['updateMsg']
+            })
         } catch (e) {
             console.error(e); 
         }
@@ -76,18 +79,21 @@
                 headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
             }).then(response=>response.text())
             .then((text) => {
-                if (text == "Success") {
+                if (text == "Success.") {
                     fetch("{{url_for('user_authentication.unsetTokenLogout')}}", {
                         method:"POST",
                         redirect:"follow",
                         headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
                     }).then(function(response) {
+                        console.log(response)
+                        deleteMsg.innerHTML = "Success."
                         if (response.redirected) {
+                            
                             window.location.href = response.url 
                         }
                     })
                 } else {
-                    console.log(text)
+                    deleteMsg.innerHTML = text
                 }
             })
         } catch (e) {

@@ -1,44 +1,69 @@
-from flask import Blueprint, request, jsonify, render_template, make_response
+""" imports """
+from flask import (Blueprint, 
+        request, 
+        jsonify, 
+        render_template, 
+        make_response)
 from models.user import Users
 from database.db import db 
-from flask_jwt_extended import  get_jwt_identity
-from flask_jwt_extended import jwt_required
-
+from flask_jwt_extended import (
+    get_jwt_identity,
+    jwt_required
+)
 import re 
 
+
+# initate blueprint  
 userRoute = Blueprint('user', __name__, url_prefix="/user")
 
+""" autenticated user main page """
 @userRoute.route('/protected', methods=['GET'])
 @jwt_required()
 def getProtected():
     return render_template('user/protected.html')
 
-
+""" view profile cRud """
 @userRoute.route("/profile", methods=['GET'])
 @jwt_required()
 def profile():
+    # get current authenticated user from db 
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
+    # return template with current user's username and email 
     return render_template('user/profile.html', username=currentUser.username, email=currentUser.email)
 
+""" delete user cruD """
 @userRoute.route("/delete", methods=['DELETE'])
 @jwt_required()
 def deleteProfile():
+    # find user we want to delete 
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
-    response = make_response("user does not exist", 400)
+
+    # specify basic msg and http code 
+    msg = "User Does Not Exist"
+    code = 400 
+
     if currentUser:
         try:
+            # delete user from db 
             db.session.delete(currentUser)
             db.session.commit()
-            response = make_response("Success", 200)
-        except Exception as e:
-            print(e)
-            response = make_response("Unable to delete user.", 500)
-    return response 
 
+            msg = "Success."
+            code = 200
+        except Exception as e:
+            print(e) # for logging 
+
+            msg = "Unable to delete user."
+            code = 500
+    return make_response(msg, code)
+
+""" update authenticated user information (email and/or username only) crUd """
 @userRoute.route("/update", methods=['PUT'])
 @jwt_required()
 def updateProfile():
+    # find current user 
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first() 
+
     msg = "" 
     code = 200
     try:
@@ -47,20 +72,22 @@ def updateProfile():
             newEmail = formData.get('email')
             newUsername = formData.get('username')
     except:
+        # error intended for cURL or Postman 
         msg="Form read error."
         code = 400
         
-    # check if the user with the same email exists in our db 
+    # check if another user with the same email exists in our db 
     userExist = Users.query.filter_by(email=newEmail).first() \
         if not (newEmail == currentUser.email) else None
+    # check if another user with the same username exists in our db 
     usernameExist = Users.query.filter_by(username=newUsername).first() \
         if not (newUsername == currentUser.username) else None 
 
     if userExist or usernameExist:
-        msg = "Email already in use" if not userExist else "Username already in use"
+        msg = "Username already in use." if not userExist else "Email already in use."
         code = 400
     elif not re.match(r"^\S+@\S+\.\S+$", newEmail):
-        msg = "Please enter a valid email"
+        msg = "Please enter a valid email."
         code = 400 
     else:
         # add new user 
@@ -69,16 +96,16 @@ def updateProfile():
             currentUser.email = newEmail
             db.session.commit() 
         except: 
-            msg = "Unable to update user information"
+            msg = "Unable to update user information."
             code = 500
         
-        msg = "User information updated" 
-    return make_response(jsonify({"msg":msg}), code)
+        msg = "User information updated." 
+    return make_response(jsonify({"updateMsg":msg}), code)
 
-# Test Protected Route 
+""" protected route test """
 @userRoute.route("/protected", methods=['GET'])
 @jwt_required()
 def protected():
-    # Access the identity of the current user with get_jwt_identity 
-    currentUser = get_jwt_identity()
-    return jsonify(logged_in_as=currentUser), 200 
+    # Access the identity of the current user ID with get_jwt_identity 
+    currentUserID = get_jwt_identity()
+    return jsonify(logged_in_as=currentUserID), 200 
