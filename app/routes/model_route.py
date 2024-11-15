@@ -14,7 +14,9 @@ import httpx
 # initate blueprint  
 modelRoute = Blueprint('model', __name__, url_prefix="/model")
 
+# initalise httpx  
 client = httpx.Client()
+# disable timeout due to long inference times 
 client = httpx.Client(timeout=None)
 
 @jwt_required()
@@ -22,13 +24,15 @@ client = httpx.Client(timeout=None)
 async def queryModel():
     try:
         if request.method == 'POST':
+            # turn json to dictionary 
             formData = request.form.to_dict()
-
-            # gets text/plain type response 
+            # format dictionary information to create user prompt for model 
             prompt = formatPrompt(formData)
+            # query model by sending request to model server 
             response = client.post("http://localhost:8000/query",
                 data=prompt,
             )
+            # send back model response to user 
             return make_response(response.json(), 201)
     except Exception as e:
         print(e)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Cover Letter Writer. </title>
+        <title>Cover Letter Writer.</title>
     
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +14,7 @@
     </head>
     
     <body>
+        <!-- Toolbar -->
         <div class="container">
                 <div class="container">
                     <h1>Cover Letter Writer.</h1>
@@ -29,12 +30,16 @@
                     </form>
                 </div>
         </div>
+
+        <!-- Displays model output // hidden when page is first loaded -->
         <div class="vertical-container">
             <div class="modelOutput container" id="modelOutput">
                 <p id="modelMsg"></p>
                 <button class="btn" onClick="window.location.reload();" id="reset"> Reset </button>
             </div>
         </div>
+
+        <!-- Displays form to generate model input -->
         <div class="vertical-container">
             <div class="container modelInput" id="modelInput">
                 <h1>Generate your cover letter!</h1>
@@ -86,12 +91,14 @@
         const modelInputContainer = document.getElementById("modelInput")
         const formSubmitBtn = document.getElementById("formSubmit")
 
+        // return CSRF access token to send valid request to flask server 
         function getCookie(name) {
             const value = `; ${document.cookie}`;
             const parts = value.split(`; ${name}=`);
             if (parts.length === 2) return parts.pop().split(';').shift();
         }
 
+        // query the model and display repsonse 
         async function queryModel() {
             const formData = new FormData(coverLetterForm)
             try{
@@ -111,10 +118,13 @@
                 console.error(e); 
             }
         }
-
+        
+        // submit button on form 
         coverLetterForm.addEventListener("submit", (event) => {
             event.preventDefault();
+            // display button after it has been submitted 
             formSubmitBtn.disabled = true;
+            // send form data to query model with 
             queryModel();
         })
 
