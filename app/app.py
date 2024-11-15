@@ -34,7 +34,6 @@ jwt.init_app(app)
 
 # initalise database with flask instance 
 db.init_app(app)
-
 with app.app_context(): 
     db.create_all()
 
