@@ -18,23 +18,14 @@ class LlmModel():
         }
         print("Qwen2.5-0.5B-Instruct Initalised")
     
-    def formatUserData(self, inputData: dict) -> str:
-        userPrompt = f"""Generate Cover Letter using this information:
-        Job Title: {inputData['Job Title']}, Preferred Qualifications: {inputData['Preferred Qualifications']}, Hiring Company: {inputData['Hiring Company']}, Applicant Name: {inputData['Applicant Name']}, Past Working Experience: {inputData['Past Working Experience']}, Current Working Experience: {inputData['Current Working Experience']}, Skillsets:{inputData['Skillsets']}, Qualifications: {inputData['Qualifications']}""" 
-
-        return userPrompt
-    
     def inference(self, userPrompt: str) -> str:
         print("begining model query")
         messages = [self.systemPrompt, 
                     {'content': userPrompt,
                      'role' : 'user'}]
-        print(messages)
         
         resultBatch = self.pipe(messages, **self.generation_args)
-
-        print(resultBatch[0]['generated_text'][2]['content'])
-
+        
         return (resultBatch[0]['generated_text'][2]['content'])
 
 model = LlmModel() 

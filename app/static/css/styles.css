@@ -55,8 +55,11 @@ justify-content:  center;
 
 label {
     font-family: "Roboto Mono", sans-serif;
-  }
+}
 
+p {
+    white-space: pre-line;
+}
 
 input {
     width: 80%;
@@ -80,6 +83,14 @@ input {
     border: 1px solid #ccc;
     box-sizing: border-box;
     border-radius: 4px;
+}
+
+.modelOutput {
+    display: none;
+}
+
+.modelInput {
+    display: block;
 }
 
 .med-text-input {

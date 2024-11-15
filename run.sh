@@ -1,2 +1,2 @@
 #!/bin/sh
-uvicorn model_server.server:app --port 2000 & flask --app app.app run &
+uvicorn model_server.server:app --port 8000 & flask --app app.app run &
