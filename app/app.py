@@ -1,14 +1,13 @@
 """ imports """
 from flask import Flask, render_template
 from datetime import timedelta
-from database import config 
-from database.db import db 
-from setup.jwt_setup import jwt 
+from .database import config 
+from .database.db import db 
+from .setup.jwt_setup import jwt 
 from flask_sqlalchemy import SQLAlchemy 
-from routes.auth_route import authRoute
-from routes.user_route import userRoute
-from routes.model_route import modelRoute
-from setup.llm_model import LlmModel
+from .routes.auth_route import authRoute
+from .routes.user_route import userRoute
+from .routes.model_route import modelRoute
 
 """ initalisations and configs """
 

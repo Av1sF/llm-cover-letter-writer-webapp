@@ -29,6 +29,7 @@ class LlmModel():
         messages = [self.systemPrompt, 
                     {'content': userPrompt,
                      'role' : 'user'}]
+        print(messages)
         
         resultBatch = self.pipe(messages, **self.generation_args)
 
