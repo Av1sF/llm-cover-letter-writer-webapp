@@ -29,5 +29,79 @@
                     </form>
                 </div>
         </div>
+
+        <div class="vertical-container">
+            <h1>Generate your cover letter!</h1>
+            <br>
+            <br> 
+            <form id="coverLetterInput" >
+                <label for="fullName">Full name:</label>
+                <input type="text" id="fullName" name="Applicant Name" placeholder="Ava Johnson">
+                <br>
+                <br>
+                <label for="jobTitle">Job Title:</label>
+                <input type="text" id="jobTitle" name="Job Title" placeholder="Data Scientist">
+                <br>
+                <br>
+                <label for="hiringCompany">Hiring Company:</label>
+                <input type="text" id="hiringCompany" name="Hiring Company" placeholder="Google">
+                <br>
+                <br>
+                <label for="currentJob">Current Position:</label>
+                <input type="text" id="currentJob" name="Current Working Experience" placeholder="Machine Learning Engineer at Cummins">
+                <br>
+                <br>
+                <label for="workExperience">Past Work Experience:</label>
+                <br>
+                <textarea id="workExperience" name="Past Working Experience" class="large-text-input" placeholder="Data Analyst at ABC Company"></textarea>
+                <br>
+                <br>
+                <label for="preferredQualification">Preferred Qualifications:</label>
+                <br>
+                <textarea id="preferredQualification" name="Preferred Qualifications" class="large-text-input" placeholder="5-10 years of experience in data analysis. Experience in anti-money laundering/terrorist financing activities. Knowledge of French and English (bilingual). Bachelor's degree in computer science, mathematics, data science, informatics, operations research, engineering, or a related field. Experience with Microsoft Azure and Azure DevOps."></textarea>
+                <br>
+                <label for="qualification">Other Qualifications:</label>
+                <br>
+                <textarea id="qualification" name="Qualifications" class="large-text-input" placeholder="Bachelor's degree in Computer Science, 5+ years of experience in data analysis and modeling, strong analytical and critical thinking skills."></textarea>
+                <br>
+                <label for="skills">Skills:</label>
+                <br>
+                <textarea id="skills" name="Skillsets" class="med-text-input" placeholder="Python, R, SQL, Machine Learning, Statistical Analysis, Data Visualization, Communication, Problem-solving"></textarea>
+                <input class='btn' type="submit" value="Generate!"> 
+            </form>
+        </div>
+        </div>
     </body>
+
+    <script>
+        const coverLetterForm = document.querySelector("#coverLetterInput")
+
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        async function queryModel() {
+            const formData = new FormData(coverLetterForm)
+            try{
+                const response = await fetch("{{url_for('model.queryModel')}}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN" : getCookie("csrf_access_token"),
+                    },
+                    body: formData,
+                })
+                console.log("sent")
+            } catch (e) {
+                console.error(e); 
+            }
+        }
+
+        coverLetterForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            queryModel();
+        })
+
+    </script>
 </html>

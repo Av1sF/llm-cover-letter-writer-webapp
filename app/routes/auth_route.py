@@ -7,7 +7,7 @@ from flask import (
     redirect)
 from models.user import Users
 from database.db import db 
-from secure import password_hash
+from setup import password_hash
 from flask_jwt_extended import (
     create_access_token, 
     set_access_cookies, 
