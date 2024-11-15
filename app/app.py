@@ -1,12 +1,13 @@
 """ imports """
 from flask import Flask, render_template
 from datetime import timedelta
-from database import config 
-from database.db import db 
-from secure.jwt_setup import jwt 
+from .database import config 
+from .database.db import db 
+from .setup.jwt_setup import jwt 
 from flask_sqlalchemy import SQLAlchemy 
-from routes.auth_route import authRoute
-from routes.user_route import userRoute
+from .routes.auth_route import authRoute
+from .routes.user_route import userRoute
+from .routes.model_route import modelRoute
 
 """ initalisations and configs """
 
@@ -23,6 +24,11 @@ app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_SECURE"] = True
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 
+# register routes from app/routes directory 
+app.register_blueprint(modelRoute)
+app.register_blueprint(authRoute)
+app.register_blueprint(userRoute)
+
 # initalise jwt with flask app from secure/jwt_setup.py 
 jwt.init_app(app)
 
@@ -31,14 +37,10 @@ db.init_app(app)
 with app.app_context(): 
     db.create_all()
 
-# register routes from app/routes directory 
-app.register_blueprint(authRoute)
-app.register_blueprint(userRoute)
-
 """ Main page """
 @app.route('/')
 def home():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5050)

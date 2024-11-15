@@ -5,9 +5,9 @@ from flask import (
     render_template, 
     make_response, 
     redirect)
-from models.user import Users
-from database.db import db 
-from secure import password_hash
+from app.models.user import Users
+from app.database.db import db 
+from app.setup import password_hash
 from flask_jwt_extended import (
     create_access_token, 
     set_access_cookies, 

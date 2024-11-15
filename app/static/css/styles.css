@@ -24,14 +24,14 @@ h1 {
     justify-content: center; 
   }
 
-  .vertical-container {
-    width: 100%;
-    height: fit-content;
-    display: grid;
-    align-items: center;
-    justify-content:  center;
-  
-  }
+.vertical-container {
+width: 100%;
+height: fit-content;
+display: grid;
+align-items: center;
+justify-content:  center;
+
+}
   
 .btn {
     padding-left: 20px;
@@ -55,8 +55,11 @@ h1 {
 
 label {
     font-family: "Roboto Mono", sans-serif;
-  }
+}
 
+p {
+    white-space: pre-line;
+}
 
 input {
     width: 80%;
@@ -69,6 +72,41 @@ input {
     border-radius: 4px;
 }
 
+.large-text-input { 
+    width: 80%;
+    height: 300px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    resize: none;
+    font-family: "Roboto Mono", sans-serif;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
+.modelOutput {
+    display: none;
+}
+
+.modelInput {
+    display: block;
+}
+
+.med-text-input {
+    width: 80%;
+    height: 150px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    resize: none;
+    font-family: "Roboto Mono", sans-serif;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+}
+
 a {
     text-decoration: none;
 }
+
