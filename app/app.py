@@ -1,13 +1,13 @@
 """ imports """
 from flask import Flask, render_template
 from datetime import timedelta
-from .database import config 
-from .database.db import db 
-from .setup.jwt_setup import jwt 
+from app.database import config 
+from app.database.db import db 
+from app.setup.jwt_setup import jwt 
 from flask_sqlalchemy import SQLAlchemy 
-from .routes.auth_route import authRoute
-from .routes.user_route import userRoute
-from .routes.model_route import modelRoute
+from app.routes.auth_route import authRoute
+from app.routes.user_route import userRoute
+from app.routes.model_route import modelRoute
 
 """ initalisations and configs """
 
@@ -40,7 +40,7 @@ with app.app_context():
 """ Main page """
 @app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template("index.html"), 200 
 
 if __name__ == "__main__":
     app.run(debug=True, port=5050)

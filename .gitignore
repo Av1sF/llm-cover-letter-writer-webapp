@@ -6,4 +6,5 @@ test.py
 mlartifacts
 mlflow/saved_models 
 mlruns
-
+.pytest_cache 
+*/__pycache__/*

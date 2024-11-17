@@ -20,7 +20,7 @@ userRoute = Blueprint('user', __name__, url_prefix="/user")
 @userRoute.route('/protected', methods=['GET'])
 @jwt_required()
 def getProtected():
-    return render_template('user/protected.html')
+    return render_template('user/protected.html'), 200
 
 """ view profile cRud """
 @userRoute.route("/profile", methods=['GET'])
@@ -29,7 +29,7 @@ def profile():
     # get current authenticated user from db 
     currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
     # return template with current user's username and email 
-    return render_template('user/profile.html', username=currentUser.username, email=currentUser.email)
+    return render_template('user/profile.html', username=currentUser.username, email=currentUser.email), 200 
 
 """ delete user cruD """
 @userRoute.route("/delete", methods=['DELETE'])
@@ -49,7 +49,7 @@ def deleteProfile():
             db.session.commit()
 
             msg = "Success."
-            code = 200
+            code = 204
         except Exception as e:
             print(e) # for logging 
 
@@ -101,11 +101,3 @@ def updateProfile():
         
         msg = "User information updated." 
     return make_response(jsonify({"updateMsg":msg}), code)
-
-""" protected route test """
-@userRoute.route("/protected", methods=['GET'])
-@jwt_required()
-def protected():
-    # Access the identity of the current user ID with get_jwt_identity 
-    currentUserID = get_jwt_identity()
-    return jsonify(logged_in_as=currentUserID), 200 
