@@ -35,11 +35,10 @@ def getRegisted():
 @authRoute.route('/register', methods=['POST'])
 def createUser():
     try:
-        if request.method == "POST":
-            formEmail = request.form['email']
-            formPassword = request.form['password']
-            formUsername = request.form['username']
-
+        formEmail = request.form['email']
+        formPassword = request.form['password']
+        formUsername = request.form['username']
+        if formEmail and formPassword and formUsername:
             # check if another user with the same email exists and/or username is in our db 
             usernameExist = Users.query.filter_by(username=formUsername).first()
             emailExist = Users.query.filter_by(email=formEmail).first()
@@ -66,10 +65,9 @@ def createUser():
                     code = 500
                 
                 msg = "Created user successfully"
-                code = 201     
+                code = 201    
         else:
-            msg="Wrong method."
-            code = 405 
+            raise Exception 
     except:
         # error if wrong cURL request
         msg="Form read error."
