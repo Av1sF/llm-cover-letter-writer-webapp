@@ -9,7 +9,7 @@ import pytest
 import responses 
 
 """
-To run tests: Cd into current directory and run 'pytest test.py'
+To run tests: run 'pytest testing\flask_app_tests.py' in powershell
 
 """
 
