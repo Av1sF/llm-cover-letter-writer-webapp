@@ -1,5 +1,3 @@
-version: "3.12"
-
 services:
   app:
     container_name: app
