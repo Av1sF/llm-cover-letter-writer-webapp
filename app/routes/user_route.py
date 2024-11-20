@@ -4,8 +4,8 @@ from flask import (Blueprint,
         jsonify, 
         render_template, 
         make_response)
-from app.models.user import Users
-from app.database.db import db 
+from models.user import Users
+from database.db import db 
 from flask_jwt_extended import (
     get_jwt_identity,
     jwt_required

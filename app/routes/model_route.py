@@ -3,12 +3,12 @@ from flask import (Blueprint,
         request, 
         jsonify,  
         make_response)
-from app.models.user import Users
-from app.database.db import db 
+from models.user import Users
+from database.db import db 
 from flask_jwt_extended import (
     jwt_required
 )
-from app.setup.llm_format import (
+from setup.llm_format import (
     formatPrompt,
     PROMPTKEYS,
     )
