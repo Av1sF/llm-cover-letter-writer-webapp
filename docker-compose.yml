@@ -1,6 +1,6 @@
 services:
-  app:
-    container_name: app
+  flask_app:
+    container_name: flask_app
     build: 
       context: ./app
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  huggingface-chat-container:
+  huggingface_container:
     build:
         context: ./model_server
         dockerfile: Dockerfile

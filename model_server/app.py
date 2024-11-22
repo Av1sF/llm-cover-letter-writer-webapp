@@ -7,13 +7,6 @@ import uvicorn
 import logging 
 from llm_model import model
 from starlette.applications import Starlette
-from starlette.middleware import Middleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
-
-# only allow api calls from localhost (flask app)
-middleware = [
-    Middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "app", "testclient", 'testserver'])
-]
 
 async def query(request):
     print(request.client.host)
@@ -39,7 +32,6 @@ app = Starlette(
     routes=[
         Route("/query", query, methods=["POST"]),
     ],
-    # middleware=middleware,
 )
 
 @app.on_event("startup")
