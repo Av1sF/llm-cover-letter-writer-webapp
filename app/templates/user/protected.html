@@ -47,39 +47,40 @@
                 <br> 
                 <form id="coverLetterInput" >
                     <label for="fullName">Full name:</label> <br>
-                    <input type="text" id="fullName" name="Applicant Name" placeholder="Ava Johnson">
+                    <input type="text" id="fullName" name="Applicant Name" placeholder="Ava Johnson" required>
                     <br>
                     <br>
                     <label for="jobTitle">Job Title:</label> <br>
-                    <input type="text" id="jobTitle" name="Job Title" placeholder="Data Scientist">
+                    <input type="text" id="jobTitle" name="Job Title" placeholder="Data Scientist" required>
                     <br>
                     <br>
                     <label for="hiringCompany">Hiring Company:</label> <br>
-                    <input type="text" id="hiringCompany" name="Hiring Company" placeholder="Google">
+                    <input type="text" id="hiringCompany" name="Hiring Company" placeholder="Google" required>
                     <br>
                     <br>
                     <label for="currentJob">Current Position:</label> <br>
-                    <input type="text" id="currentJob" name="Current Working Experience" placeholder="Machine Learning Engineer at Cummins">
+                    <input type="text" id="currentJob" name="Current Working Experience" placeholder="Machine Learning Engineer at Cummins" required>
                     <br>
                     <br>
                     <label for="workExperience">Past Work Experience:</label>
                     <br>
-                    <textarea id="workExperience" name="Past Working Experience" class="large-text-input" placeholder="Data Analyst at ABC Company"></textarea>
+                    <textarea id="workExperience" name="Past Working Experience" class="large-text-input" placeholder="Data Analyst at ABC Company" required></textarea>
                     <br>
                     <br>
                     <label for="preferredQualification">Preferred Qualifications:</label>
                     <br>
-                    <textarea id="preferredQualification" name="Preferred Qualifications" class="large-text-input" placeholder="5-10 years of experience in data analysis. Experience in anti-money laundering/terrorist financing activities. Knowledge of French and English (bilingual). Bachelor's degree in computer science, mathematics, data science, informatics, operations research, engineering, or a related field. Experience with Microsoft Azure and Azure DevOps."></textarea>
+                    <textarea id="preferredQualification" name="Preferred Qualifications" class="large-text-input" placeholder="5-10 years of experience in data analysis. Experience in anti-money laundering/terrorist financing activities. Knowledge of French and English (bilingual). Bachelor's degree in computer science, mathematics, data science, informatics, operations research, engineering, or a related field. Experience with Microsoft Azure and Azure DevOps." required></textarea>
                     <br>
                     <label for="qualification">Other Qualifications:</label>
                     <br>
-                    <textarea id="qualification" name="Qualifications" class="large-text-input" placeholder="Bachelor's degree in Computer Science, 5+ years of experience in data analysis and modeling, strong analytical and critical thinking skills."></textarea>
+                    <textarea id="qualification" name="Qualifications" class="large-text-input" placeholder="Bachelor's degree in Computer Science, 5+ years of experience in data analysis and modeling, strong analytical and critical thinking skills." required></textarea>
                     <br>
                     <label for="skills">Skills:</label>
                     <br>
-                    <textarea id="skills" name="Skillsets" class="med-text-input" placeholder="Python, R, SQL, Machine Learning, Statistical Analysis, Data Visualization, Communication, Problem-solving"></textarea>
-                    <input class='btn' type="submit" id="formSubmit" value="Generate!"> 
+                    <textarea id="skills" name="Skillsets" class="med-text-input" placeholder="Python, R, SQL, Machine Learning, Statistical Analysis, Data Visualization, Communication, Problem-solving" required></textarea>
+                    <input class='btn' type="submit" id="formSubmit" value="Generate!" > 
                 </form>
+                <p id="submitMessage"></p>
             </div>
         </div>
     </body>
@@ -90,6 +91,7 @@
         const modelOutputContainer = document.getElementById("modelOutput")
         const modelInputContainer = document.getElementById("modelInput")
         const formSubmitBtn = document.getElementById("formSubmit")
+        const formSubmitMsg = document.getElementById("submitMessage")
 
         // return CSRF access token to send valid request to flask server 
         function getCookie(name) {
@@ -101,6 +103,7 @@
         // query the model and display repsonse 
         async function queryModel() {
             const formData = new FormData(coverLetterForm)
+            formSubmitMsg.innerHTML = "Querying model... Estimated Time: 4 mins"
             try{
                 const response = await fetch("{{url_for('model.queryModel')}}", {
                     method: "POST",

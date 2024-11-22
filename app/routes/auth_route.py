@@ -94,8 +94,8 @@ def createLoginToken():
         try:
             # user is logged in and an access token is created, stored as a cookie 
             response = make_response(redirect('/user/protected'))
-            access_token = create_access_token(identity=userExist.id)
-            set_access_cookies(response, access_token)
+            accessToken = create_access_token(identity=str(userExist.id))
+            set_access_cookies(response, accessToken)
             return response, 302 
         except Exception as e:
             return render_template('auth/login.html', msg="Server error."), 500

@@ -27,7 +27,7 @@ def getProtected():
 @jwt_required()
 def profile():
     # get current authenticated user from db 
-    currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
+    currentUser = Users.query.filter_by(id=int(get_jwt_identity())).first()
     # return template with current user's username and email 
     return render_template('user/profile.html', username=currentUser.username, email=currentUser.email), 200 
 
@@ -36,7 +36,7 @@ def profile():
 @jwt_required()
 def deleteProfile():
     # find user we want to delete 
-    currentUser = Users.query.filter_by(id=get_jwt_identity()).first()
+    currentUser = Users.query.filter_by(id=int(get_jwt_identity())).first()
 
     # specify basic msg and http code 
     msg, code = "User Does Not Exist", 400 
@@ -61,7 +61,7 @@ def deleteProfile():
 @jwt_required()
 def updateProfile():
     # find current user 
-    currentUser = Users.query.filter_by(id=get_jwt_identity()).first() 
+    currentUser = Users.query.filter_by(id=int(get_jwt_identity())).first() 
     msg = "" 
     code = None
     

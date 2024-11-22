@@ -13,6 +13,7 @@ from setup.llm_format import (
     PROMPTKEYS,
     )
 import requests
+from os import environ
 
 # initate blueprint  
 modelRoute = Blueprint('model', __name__, url_prefix="/model")
@@ -31,11 +32,13 @@ async def queryModel():
         return make_response(jsonify({"modelOutput":"Form read error."}), 400)
 
     try:
+        queryUri = f"{environ.get('MODEL_URI')}/query"
         # query model by sending request to model server 
-        response = requests.post("http://localhost:8000/query",
+        response = requests.post(queryUri,
             data=prompt,
         )
         # send back model response to user 
         return make_response(response.json(), 201)
     except Exception as e:
+        print(e)
         return make_response(jsonify({"modelOutput":"unable to generate output."}), 500)

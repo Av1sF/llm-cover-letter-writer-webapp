@@ -1,11 +1,20 @@
-from transformers import pipeline 
+from transformers import pipeline
+import logging 
  
 class LlmModel():
     def __init__(self):
+        self.__modelPath = "/model/Qwen2.5-0.5B-Instruct"
         self.__modelName = "Qwen/Qwen2.5-0.5B-Instruct"
+    
+        try:
+            self.__pipe = pipeline("text-generation", self.__modelPath, torch_dtype="auto", device="cpu")
+            print("***Qwen2.5-0.5B-Instruct Model Loaded in Locally***")
+        except:
+            # download model 
+            print("***Downloading Qwen2.5-0.5B-Instruct LLM model from HuggingFace***")
+            self.__pipe = pipeline("text-generation", self.__modelName, torch_dtype="auto", device="cpu")
+            self.__pipe.save_pretrained(self.__modelPath)
 
-        # load model 
-        self.__pipe = pipeline("text-generation", self.__modelName, torch_dtype="auto", device_map="auto")
         self.__pipe.tokenizer.padding_side="left"
 
         # system prompt for model 
@@ -22,7 +31,7 @@ class LlmModel():
             "top_p": 0.8,
         }
 
-        print("***Qwen2.5-0.5B-Instruct LLM model Initalised****")
+        print("***Qwen2.5-0.5B-Instruct LLM model Initalised***")
     
     # query model 
     def inference(self, userPrompt: str) -> str:
