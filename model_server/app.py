@@ -1,10 +1,11 @@
 """ imports """
+import sys
+sys.path.append('model_server')
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse
 from starlette.routing import Route
 import asyncio
 import uvicorn
-import logging 
 from llm_model import model
 from starlette.applications import Starlette
 

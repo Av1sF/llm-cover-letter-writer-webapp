@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # test client and server instance 
 from starlette.testclient import TestClient
-from model_server.server import app 
+from model_server.app import app 
 
 """ 
 Run test by 'pytest testing\starlette_server_tests.py' in powershell. ETA: 250 seconds (due to model inference)

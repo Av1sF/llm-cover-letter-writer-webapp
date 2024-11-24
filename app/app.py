@@ -1,7 +1,9 @@
 """ imports """
+import sys
+sys.path.append('app')
 from flask import Flask, render_template
 from datetime import timedelta
-# from app.database import config 
+from database import config 
 from database.db import db 
 from setup.jwt_setup import jwt 
 from flask_sqlalchemy import SQLAlchemy 
