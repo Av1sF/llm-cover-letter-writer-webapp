@@ -1,0 +1,48 @@
+services:
+  flask_app:
+    container_name: flask_app
+    build: 
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"
+    environment:
+      - DB_URL=postgresql://postgres:postgres@flask_db:5432/postgres
+      - JWT_SECRET_KEY=321dg4nt4h5432!
+      - MODEL_URI=http://huggingface_container:8000
+    depends_on:
+      - flask_db
+    
+  flask_db:
+    container_name: flask_db
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  huggingface_container:
+    build:
+        context: ./model_server
+        dockerfile: Dockerfile
+    container_name: huggingface_container
+    ports:
+      - "8000:8000"
+    volumes:
+      - huggingface-model:/model
+    deploy:
+      resources:
+        reservations:
+          memory: 5G
+          cpus: '1'
+        limits:
+          memory: 16G
+          cpus: '2'
+volumes:
+  pgdata: {}
+  huggingface-model:
+    driver: local

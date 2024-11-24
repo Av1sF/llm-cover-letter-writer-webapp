@@ -1,0 +1,54 @@
+name: CI pipeline
+
+on:
+  push:
+    branches:
+      - main 
+      - dev 
+      - tests
+  pull_request:
+      branches:
+        - main
+        - dev
+        - tests 
+  workflow_dispatch: 
+
+jobs:
+  test:
+    runs-on: ubuntu-latest 
+  
+    services: 
+      flask_db:
+        image: postgres:12
+        ports:
+          - "5432:5432"
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python 
+        uses: actions/setup-python@v4
+        with: 
+          python-version: '3.12'
+
+      - name: Install dependencies 
+        run: pip install pytest flask flask_jwt_extended flask_sqlalchemy passlib requests psycopg2-binary flask[async] transformers starlette uvicorn torch accelerate asyncio
+
+      - name: Run tests 
+        env: 
+          DB_URL: postgresql://postgres:postgres@flask_db:5432/postgres
+          JWT_SECRET_KEY: 321dg4nt4h5432!
+        run: pytest
+

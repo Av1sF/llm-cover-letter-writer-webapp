@@ -1,0 +1,6 @@
+transformers
+starlette
+uvicorn
+torch 
+accelerate
+asyncio

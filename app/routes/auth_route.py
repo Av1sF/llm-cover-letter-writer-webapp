@@ -5,9 +5,9 @@ from flask import (
     render_template, 
     make_response, 
     redirect)
-from app.models.user import Users
-from app.database.db import db 
-from app.setup import password_hash
+from models.user import Users
+from database.db import db 
+from setup import password_hash
 from flask_jwt_extended import (
     create_access_token, 
     set_access_cookies, 
@@ -94,8 +94,8 @@ def createLoginToken():
         try:
             # user is logged in and an access token is created, stored as a cookie 
             response = make_response(redirect('/user/protected'))
-            access_token = create_access_token(identity=userExist.id)
-            set_access_cookies(response, access_token)
+            accessToken = create_access_token(identity=str(userExist.id))
+            set_access_cookies(response, accessToken)
             return response, 302 
         except Exception as e:
             return render_template('auth/login.html', msg="Server error."), 500
