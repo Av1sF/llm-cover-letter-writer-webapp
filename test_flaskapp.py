@@ -853,7 +853,7 @@ def testQueryModel(client):
     # mock API response from LLM model server 
     responses.add(
         responses.POST,
-        "http://localhost:8000/query",
+        "http://0.0.0.0:8000/query",
         json={"modelOutput": modelOutput},
         status=200
     )
