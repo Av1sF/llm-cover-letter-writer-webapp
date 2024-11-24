@@ -4,7 +4,7 @@ from database.db import db
 
 class Users(db.Model):
     __tablename__ = "users"
-
+    extend_existing=True 
     # columns 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(40))
