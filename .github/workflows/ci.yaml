@@ -5,9 +5,14 @@ on:
     branches:
       - main 
       - dev 
+      - testing
   pull_request:
-      - main
-      - dev
+      branches:
+        - main
+        - dev
+        - testing 
+  workflow_dispatch: 
+
 jobs:
   test:
     runs-on: ubuntu-latest 
