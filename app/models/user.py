@@ -1,3 +1,5 @@
+import sys
+sys.path.append('app')
 from database.db import db 
 
 class Users(db.Model):

@@ -5,15 +5,23 @@ class LlmModel():
     def __init__(self):
         self.__modelPath = "/model/Qwen2.5-0.5B-Instruct"
         self.__modelName = "Qwen/Qwen2.5-0.5B-Instruct"
+        self.__modelStored = False 
     
         try:
             self.__pipe = pipeline("text-generation", self.__modelPath, torch_dtype="auto", device="cpu")
+            self.__modelStored = True 
             print("***Qwen2.5-0.5B-Instruct Model Loaded in Locally***")
         except:
             # download model 
             print("***Downloading Qwen2.5-0.5B-Instruct LLM model from HuggingFace***")
             self.__pipe = pipeline("text-generation", self.__modelName, torch_dtype="auto", device="cpu")
-            self.__pipe.save_pretrained(self.__modelPath)
+        
+        try:
+            if not self.__modelStored:
+                self.__pipe.save_pretrained(self.__modelPath)
+        except Exception as e:
+            print(e)
+            # model cannot be stored during testing 
 
         self.__pipe.tokenizer.padding_side="left"
 
