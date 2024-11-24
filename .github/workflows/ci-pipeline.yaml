@@ -50,5 +50,6 @@ jobs:
         env: 
           DB_URL: postgresql://postgres:postgres@localhost:5432/postgres
           JWT_SECRET_KEY: 321dg4nt4h5432!
+          MODEL_URI: http://0.0.0.0:8000
         run: pytest
 
