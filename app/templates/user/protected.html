@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cover Letter Writer.</title>
+    
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/styles.css">
+    
+          <!-- fonts -->
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    </head>
+    
+    <body>
+        <!-- Toolbar -->
+        <div class="container">
+                <div class="container">
+                    <h1>Cover Letter Writer.</h1>
+                </div>
+    
+                <div class="container">
+                    <a class="btn" href="/user/profile">
+                        View Profile
+                    <a>
+                    
+                    <form action="/auth/logout" method="post">
+                        <input class="btn" type="submit" value="logout">
+                    </form>
+                </div>
+        </div>
+
+        <!-- Displays model output // hidden when page is first loaded -->
+        <div class="vertical-container">
+            <div class="modelOutput container" id="modelOutput">
+                <p id="modelMsg"></p>
+                <button class="btn" onClick="window.location.reload();" id="reset"> Reset </button>
+            </div>
+        </div>
+
+        <!-- Displays form to generate model input -->
+        <div class="vertical-container">
+            <div class="container modelInput" id="modelInput">
+                <h1>Generate your cover letter!</h1>
+                <br>
+                <br> 
+                <form id="coverLetterInput" >
+                    <label for="fullName">Full name:</label> <br>
+                    <input type="text" id="fullName" name="Applicant Name" placeholder="Ava Johnson" required>
+                    <br>
+                    <br>
+                    <label for="jobTitle">Job Title:</label> <br>
+                    <input type="text" id="jobTitle" name="Job Title" placeholder="Data Scientist" required>
+                    <br>
+                    <br>
+                    <label for="hiringCompany">Hiring Company:</label> <br>
+                    <input type="text" id="hiringCompany" name="Hiring Company" placeholder="Google" required>
+                    <br>
+                    <br>
+                    <label for="currentJob">Current Position:</label> <br>
+                    <input type="text" id="currentJob" name="Current Working Experience" placeholder="Machine Learning Engineer at Cummins" required>
+                    <br>
+                    <br>
+                    <label for="workExperience">Past Work Experience:</label>
+                    <br>
+                    <textarea id="workExperience" name="Past Working Experience" class="large-text-input" placeholder="Data Analyst at ABC Company" required></textarea>
+                    <br>
+                    <br>
+                    <label for="preferredQualification">Preferred Qualifications:</label>
+                    <br>
+                    <textarea id="preferredQualification" name="Preferred Qualifications" class="large-text-input" placeholder="5-10 years of experience in data analysis. Experience in anti-money laundering/terrorist financing activities. Knowledge of French and English (bilingual). Bachelor's degree in computer science, mathematics, data science, informatics, operations research, engineering, or a related field. Experience with Microsoft Azure and Azure DevOps." required></textarea>
+                    <br>
+                    <label for="qualification">Other Qualifications:</label>
+                    <br>
+                    <textarea id="qualification" name="Qualifications" class="large-text-input" placeholder="Bachelor's degree in Computer Science, 5+ years of experience in data analysis and modeling, strong analytical and critical thinking skills." required></textarea>
+                    <br>
+                    <label for="skills">Skills:</label>
+                    <br>
+                    <textarea id="skills" name="Skillsets" class="med-text-input" placeholder="Python, R, SQL, Machine Learning, Statistical Analysis, Data Visualization, Communication, Problem-solving" required></textarea>
+                    <input class='btn' type="submit" id="formSubmit" value="Generate!" > 
+                </form>
+                <p id="submitMessage"></p>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        const coverLetterForm = document.querySelector("#coverLetterInput")
+        const modelOutput = document.getElementById("modelMsg")
+        const modelOutputContainer = document.getElementById("modelOutput")
+        const modelInputContainer = document.getElementById("modelInput")
+        const formSubmitBtn = document.getElementById("formSubmit")
+        const formSubmitMsg = document.getElementById("submitMessage")
+
+        // return CSRF access token to send valid request to flask server 
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
+
+        // query the model and display repsonse 
+        async function queryModel() {
+            const formData = new FormData(coverLetterForm)
+            formSubmitMsg.innerHTML = "Querying model... Estimated Time: 4 mins"
+            try{
+                const response = await fetch("{{url_for('model.queryModel')}}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN" : getCookie("csrf_access_token"),
+                    },
+                    body: formData,
+                }).then((response) => response.json())
+                .then((data) => {
+                    modelOutput.innerHTML = data['modelOutput']
+                    modelOutputContainer.style['display'] = 'block';
+                    modelInputContainer.style['display'] = 'none';
+                })
+            } catch (e) {
+                console.error(e); 
+            }
+        }
+        
+        // submit button on form 
+        coverLetterForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+            // display button after it has been submitted 
+            formSubmitBtn.disabled = true;
+            // send form data to query model with 
+            queryModel();
+        })
+
+    </script>
+</html>

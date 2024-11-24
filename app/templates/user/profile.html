@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Profile</title>
+    
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/css/styles.css">
+    
+        <!-- fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100..900;1,100..900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    </head>
+
+<body>
+    <div class="vertical-container">
+        <h1>Profile</h1>
+        <!-- display current user info  -->
+        <h1>{{username}} <br> {{email}} </h1>
+        <br>
+        <br> 
+        <p>Update your profile! </p>
+        <!-- form to update user information  -->
+        <form id="updateUserInfo" >
+            <input type="username" name="username" value="{{username}}">
+            <br>
+            <br>
+            <input type="email" name="email" value="{{email}}">
+            <br>
+            <br>
+            <input class='btn' type="submit" value="Update"> 
+        </form>
+        <!-- display any returned update messages from flask  -->
+        <p id="updateMessage"></p>
+        <br>
+        <br>
+        <p>
+        Once deleted you will be redirected to the registeration page 
+        </p>
+        <!-- button to delete user -->
+        <div class='btn' style='width:fit-content' id ='deleteUser'>DELETE PROFILE</div>
+        <!-- display delete message if any are returned from flask -->
+        <p id="deleteMsg"></p>
+    </div>
+</body>
+
+<script>
+    const updateForm = document.querySelector("#updateUserInfo")
+    const updateMessage= document.getElementById("updateMessage")
+    const deletebtn = document.getElementById("deleteUser")
+    const deleteMsg = document.getElementById("deleteMsg")
+    
+    // get users csrf_access_token to send valid request to flask 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // submit user update form data 
+    async function sendData() {
+        const formData = new FormData(updateForm)
+        try {
+            const response = await fetch("{{url_for('user.updateProfile')}}", {
+                method:"PUT",
+                headers: {
+                "X-CSRF-TOKEN": getCookie("csrf_access_token"),
+                },
+                body: formData, 
+            }).then((response) => response.json())
+            .then((data) => {
+                // display any update messages in page html 
+                updateMessage.innerHTML = data['updateMsg']
+            })
+        } catch (e) {
+            console.error(e); 
+        }
+
+    }
+
+    // procedure to delete a user 
+    function deleteRequest() {
+        try{
+            fetch("{{url_for('user.deleteProfile')}}", {
+                method:"DELETE",
+                redirect:"follow",
+                headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
+            }).then(response=>response.text())
+            .then((text) => {
+                // user deleted successfully
+                if (text == "Success.") {
+                    // logout user
+                    fetch("{{url_for('user_authentication.unsetTokenLogout')}}", {
+                        method:"POST",
+                        redirect:"follow",
+                        headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
+                    }).then(function(response) {
+                        console.log(response)
+                        deleteMsg.innerHTML = "Success."
+                        // once logged out redirect them to main page 
+                        if (response.redirected) {
+                            window.location.href = response.url 
+                        }
+                    })
+                } else {
+                    // display any error messages 
+                    deleteMsg.innerHTML = text
+                }
+            })
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    // update user data form submit button 
+    updateForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        // send form 
+        sendData();
+    })
+
+    // delete user when delete button is pressed 
+    deletebtn.addEventListener("click", deleteRequest)
+</script>
+</html>

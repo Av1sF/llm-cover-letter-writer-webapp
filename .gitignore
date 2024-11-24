@@ -1,0 +1,10 @@
+.venv
+app/.env
+app/*/__pycache__/*
+test.py
+.env
+mlartifacts
+mlflow/saved_models 
+mlruns
+.pytest_cache 
+*/__pycache__/*
