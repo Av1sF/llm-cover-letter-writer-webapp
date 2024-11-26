@@ -86,26 +86,26 @@
                 method:"DELETE",
                 redirect:"follow",
                 headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
-            }).then(response=>response.text())
-            .then((text) => {
+            }).then(response=> {
                 // user deleted successfully
-                if (text == "Success.") {
+                if (response.status == 204) {
                     // logout user
                     fetch("{{url_for('user_authentication.unsetTokenLogout')}}", {
                         method:"POST",
                         redirect:"follow",
                         headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
                     }).then(function(response) {
-                        console.log(response)
                         deleteMsg.innerHTML = "Success."
+                        window.location.href = "/"
                         // once logged out redirect them to main page 
                         if (response.redirected) {
                             window.location.href = response.url 
+                            console.log("redirected")
                         }
                     })
                 } else {
                     // display any error messages 
-                    deleteMsg.innerHTML = text
+                    response.text().then(txt => {deleteMsg.innerHTML=txt})
                 }
             })
         } catch (e) {
