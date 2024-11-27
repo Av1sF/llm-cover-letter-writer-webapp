@@ -9,7 +9,7 @@ from starlette.testclient import TestClient
 from model_server.app import app 
 
 """ 
-Run test by 'pytest testing\starlette_server_tests.py' in powershell. ETA: 250 seconds (due to model inference)
+Run test by 'pytest' in powershell. ETA: 250 seconds (due to model inference)
 
 """
 

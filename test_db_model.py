@@ -8,10 +8,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # our db model 
 from app.models.user import Users
 
-# 
-# Tests the interface class of the Users model 
-# To run: 'pytest testing\user_model_test.py' in powershell 
-# 
+
+""" 
+Run test by 'pytest' in powershell. 
+
+"""
 
 def testNewUser():
     user = Users(

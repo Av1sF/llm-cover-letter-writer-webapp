@@ -8,10 +8,12 @@ from app.app import app
 import pytest 
 import responses 
 
-"""
-To run tests: run 'pytest testing\flask_app_tests.py' in powershell
+
+""" 
+Run test by 'pytest' in powershell. ETA: 3.58 seconds 
 
 """
+
 # global variables (user authentication)
 accessTokenCookie = None 
 csrfAccessToken = None 

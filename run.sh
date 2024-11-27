@@ -1,15 +1,21 @@
-kind create cluster --name test --config ./cluster-config.yml 
+kind create cluster --name cloud-cw --config ./k8/cluster-config.yml 
 
 kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
 
 docker build -t flask-app ./app 
 
-kubectl apply -f ./secret.yml 
+docker build -t llm-model-server ./model_server
 
-kubectl apply -f ./postgres-deployment.yml
+kubectl apply -f ./k8/secret.yml 
 
-kind load docker-image flask-app --name test   
+kubectl apply -f ./k8/postgres-deployment.yml
 
-kubectl apply -f ./flask-deployment.yml  
+kind load docker-image llm-model-server --name cloud-cw 
 
-kubectl apply -f ./ingress.yml
+kind load docker-image flask-app --name cloud-cw   
+
+kubectl apply -f ./k8/model-deployment.yml
+
+kubectl apply -f ./k8/flask-deployment.yml  
+
+kubectl apply -f ./k8/ingress.yml

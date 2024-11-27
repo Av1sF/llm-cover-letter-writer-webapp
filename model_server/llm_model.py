@@ -1,5 +1,6 @@
 from transformers import pipeline
 import logging 
+from datetime import datetime
  
 class LlmModel():
     def __init__(self):
@@ -19,6 +20,7 @@ class LlmModel():
         try:
             if not self.__modelStored:
                 self.__pipe.save_pretrained(self.__modelPath)
+                print("***Saving Qwen2.5-0.5B-Instruct LLM model Locally***")
         except Exception as e:
             print(e)
             # model cannot be stored during testing 
@@ -43,7 +45,7 @@ class LlmModel():
     
     # query model 
     def inference(self, userPrompt: str) -> str:
-        print("begining model query")
+        print(f"***Querying Model {datetime.now()}***")
         messages = [self.__systemPrompt, 
                     {'content': userPrompt,
                      'role' : 'user'}]
@@ -51,6 +53,7 @@ class LlmModel():
         resultBatch = self.__pipe(messages, **self.__generation_args)
         
         # return just the cover letter 
+        print(f"***Model Generated Output {datetime.now()}***")
         return (resultBatch[0]['generated_text'][2]['content'])
 
 # initalise model 
