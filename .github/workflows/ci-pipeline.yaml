@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest 
   
     services: 
+      # create postgres database for testing 
       postgres:
         image: postgres:12
         ports:
@@ -45,7 +46,7 @@ jobs:
 
       - name: Install dependencies 
         run: pip install pytest flask flask_jwt_extended flask_sqlalchemy passlib requests responses psycopg2-binary flask[async] transformers starlette httpx python-dotenv uvicorn torch accelerate asyncio
-
+      
       - name: Run tests 
         env: 
           DB_URL: postgresql://postgres:postgres@localhost:5432/postgres

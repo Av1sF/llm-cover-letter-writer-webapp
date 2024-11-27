@@ -6,7 +6,7 @@ metadata:
   labels:
     app: "flask"
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: "flask"
@@ -21,9 +21,9 @@ spec:
         imagePullPolicy: Never
         resources:
           limits:
-            cpu: "0.5"
+            cpu: "0.25"
           requests:
-            cpu: "0.5"
+            cpu: "0.25"
         ports:
           - containerPort: 5000
         env: 
