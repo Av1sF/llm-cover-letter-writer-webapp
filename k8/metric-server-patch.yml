@@ -1,4 +1,5 @@
 # Credit: https://gist.github.com/sanketsudake/a089e691286bf2189bfedf295222bd43
+# change configs to deploy metric server with Kind
 spec:
   template:
     spec:

@@ -38,6 +38,7 @@ spec:
           - containerPort: 8000
             name: llm-model
         volumeMounts:
+          # volume mount to store downloaded HF model 
           - name: model-storage
             mountPath: /model
       volumes:

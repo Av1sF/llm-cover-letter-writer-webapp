@@ -5,6 +5,8 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- styles -->
     <link rel="stylesheet" href="/static/css/styles.css">
 
     <!-- fonts -->
@@ -22,6 +24,7 @@
     
         <div class="vertical-container" style="width:100%">
             <form action="/auth/login" method="POST">
+                <!-- display any input error messages or success messages -->
                 {{msg if msg}}
                 <br>
                 <input type="username" name="username" placeholder="Username"> 

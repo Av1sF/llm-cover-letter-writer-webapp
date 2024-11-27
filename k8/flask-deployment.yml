@@ -18,7 +18,7 @@ spec:
       containers:
       - name: "flask"
         image: "flask-app"
-        imagePullPolicy: Never
+        imagePullPolicy: Never # have to load in docker image 
         resources:
           limits:
             cpu: "0.25"
@@ -37,7 +37,7 @@ spec:
               secretKeyRef:
                 key: "JWT_SECRET_KEY"
                 name: "secret"
-          - name: MODEL_URI
+          - name: MODEL_URI # model server url for http request
             valueFrom:
               configMapKeyRef:
                 name: llm-config

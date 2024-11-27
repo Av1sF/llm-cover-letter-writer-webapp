@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: flask-service
+  name: ingress-resource
   annotations:
     # for the NGINX's nginx-ingress 
     nginx.org/proxy-connect-timeout: 3600s
