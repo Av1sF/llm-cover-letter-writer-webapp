@@ -25,7 +25,6 @@ async def serverLoop(q):
         # when q is not empty 
         (string, responseQ) = await q.get()
         # get model output 
-        out = "test"
         out = model.inference(string)
         await responseQ.put(out)
 

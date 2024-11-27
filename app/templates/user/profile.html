@@ -2,9 +2,11 @@
 <html lang="en">
     <head>
         <title>Profile</title>
-    
+        
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- styles  -->
         <link rel="stylesheet" href="/static/css/styles.css">
     
         <!-- fonts -->
@@ -17,7 +19,7 @@
     <div class="vertical-container">
         <h1>Profile</h1>
         <!-- display current user info  -->
-        <h1>{{username}} <br> {{email}} </h1>
+        <h1 id="userInfo">{{username}} <br> {{email}} </h1>
         <br>
         <br> 
         <p>Update your profile! </p>
@@ -50,6 +52,7 @@
     const updateMessage= document.getElementById("updateMessage")
     const deletebtn = document.getElementById("deleteUser")
     const deleteMsg = document.getElementById("deleteMsg")
+    const userInfo = document.getElementById("userInfo")
     
     // get users csrf_access_token to send valid request to flask 
     function getCookie(name) {
@@ -72,6 +75,9 @@
             .then((data) => {
                 // display any update messages in page html 
                 updateMessage.innerHTML = data['updateMsg']
+                if (data['updateMsg'] == "User information updated.") {
+                    userInfo.innerHTML = `${formData.get('username')}<br>${formData.get('email')}` 
+                }
             })
         } catch (e) {
             console.error(e); 
@@ -86,26 +92,26 @@
                 method:"DELETE",
                 redirect:"follow",
                 headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
-            }).then(response=>response.text())
-            .then((text) => {
+            }).then(response=> {
                 // user deleted successfully
-                if (text == "Success.") {
+                if (response.status == 204) {
                     // logout user
                     fetch("{{url_for('user_authentication.unsetTokenLogout')}}", {
                         method:"POST",
                         redirect:"follow",
                         headers: {"X-CSRF-TOKEN": getCookie("csrf_access_token")}
                     }).then(function(response) {
-                        console.log(response)
                         deleteMsg.innerHTML = "Success."
+                        window.location.href = "/"
                         // once logged out redirect them to main page 
                         if (response.redirected) {
                             window.location.href = response.url 
+                            console.log("redirected")
                         }
                     })
                 } else {
                     // display any error messages 
-                    deleteMsg.innerHTML = text
+                    response.text().then(txt => {deleteMsg.innerHTML=txt})
                 }
             })
         } catch (e) {

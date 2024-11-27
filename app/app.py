@@ -3,10 +3,8 @@ import sys
 sys.path.append('app')
 from flask import Flask, render_template
 from datetime import timedelta
-from database import config 
 from database.db import db 
 from setup.jwt_setup import jwt 
-from flask_sqlalchemy import SQLAlchemy 
 from routes.auth_route import authRoute
 from routes.user_route import userRoute
 from routes.model_route import modelRoute
@@ -46,4 +44,4 @@ def home():
     return render_template("index.html"), 200 
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0",port=5050)
+    app.run(debug=False, host="0.0.0.0",port=5000)

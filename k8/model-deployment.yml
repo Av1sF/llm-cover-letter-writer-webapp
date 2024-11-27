@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: llm-config
+data:
+  model-url: http://llm-model-service.default.svc.cluster.local:8000
+
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "llm-model"
+  namespace: "default"
+  labels:
+    app: "llm-model"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "llm-model"
+  template:
+    metadata:
+      labels:
+        app: "llm-model"
+    spec:
+      containers:
+      - name: "llm-model"
+        image: "llm-model-server"
+        imagePullPolicy: Never
+        resources:
+          limits:
+            cpu: "3"
+            memory: "2Gi"
+          requests:
+            cpu: "2"
+            memory: "1Gi"
+        ports:
+          - containerPort: 8000
+            name: llm-model
+        volumeMounts:
+          # volume mount to store downloaded HF model 
+          - name: model-storage
+            mountPath: /model
+      volumes:
+        - name: model-storage
+          persistentVolumeClaim:
+            claimName: model-pv-claim
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-model-service 
+spec:
+  selector:
+    app: llm-model
+  ports:
+    - port: 8000
+      targetPort: 8000
+      name: http
+  
