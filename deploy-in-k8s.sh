@@ -1,3 +1,4 @@
+#!/bin/bash
 printf '***5CCSACCA ~ Avis Fung k23036967 avis.cl.fung@kcl.ac.uk***\n'
 printf '***KUBERNETES DEPLOYMENT***\n\n'
 
@@ -36,14 +37,14 @@ kubectl apply -f ./k8/model-deployment.yml
 # wait until model-server pod's status is Running 
 kubectl wait --for=jsonpath='{.status.phase}'=Running pod/$(kubectl get pod -l app=llm-model -o jsonpath="{.items[0].metadata.name}") --timeout=300s
 # wait until the pod's logs show that the model has been downloaded and initalised
-until kubectl logs -f $(kubectl get pod -l app=llm-model -o jsonpath="{.items[0].metadata.name}")| grep -m 1 "***Qwen2.5-0.5B-Instruct LLM model Initalised***" ; do sleep 1 ; done
-
+until kubectl logs $(kubectl get pod -l app=llm-model -o jsonpath="{.items[0].metadata.name}")| grep -m 1 "***Qwen2.5-0.5B-Instruct LLM model Initalised***" ; do sleep 1 ; done
 
 printf '\n\n***Deploying Flask Server in Cluster***\n'
 kubectl apply -f ./k8/flask-deployment.yml  
 # wait until flask pod's status is running 
 kubectl wait --for=jsonpath='{.status.phase}'=Running pod/$(kubectl get pod -l app=flask -o jsonpath="{.items[0].metadata.name}") --timeout=300s
-
+# # wait until the pod's logs show that the flask startup is completed 
+until kubectl logs $(kubectl get pod -l app=flask -o jsonpath="{.items[0].metadata.name}")| grep -m 1 "* Serving Flask app 'app'" ; do sleep 1 ; done
 
 printf '\n\n\n***Deploying Ingress Resource Definition***\n'
 kubectl apply -f ./k8/ingress.yml
