@@ -3,8 +3,7 @@ from flask import (Blueprint,
         request, 
         jsonify,  
         make_response)
-from models.user import Users
-from database.db import db 
+ 
 from flask_jwt_extended import (
     jwt_required
 )
