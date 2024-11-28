@@ -130,10 +130,10 @@ Docker Compose was used as part of the development process for proof of concept 
     model_server  | INFO:     Started server process [1]                                                              
     model_server  | INFO:     Waiting for application startup.
     model_server  | INFO:     Application startup complete.
-    model_server  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)                           
-                                                      
+    model_server  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)                                               
    ```
 4. WAIT until the container `model_server` has finished it's application startup, and connect to the webapp via one of the addresses `flask_app` is currently running on.
+5. To stop, CTRL+C and then run `docker compose down`
 
 # Usage 
 Consist of 3 main parts: [cURL Walkthrough](#curl-walkthrough), [Webapp GUI Walkthrough](#webapp-gui-walkthrough) and [Kubernetes Metrics Commands](#kubernetes-metrics-commands)
