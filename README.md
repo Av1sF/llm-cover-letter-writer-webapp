@@ -71,6 +71,14 @@ Docker Compose was used as part of the development process for proof of concept 
 
 # Usage 
 ### Webapp GUI Walkthrough 
+1. Connect to the Flask webapp via the method specified for your specific method of deploying. (ie, http://localhost/ for Kubernetes)
+   ![image](https://github.com/user-attachments/assets/69525335-1ed7-4189-a15e-d52127929670)
+2. Click on Register and it should lead you to /auth/register page. 
+   ![image](https://github.com/user-attachments/assets/fed5e718-ea5d-4cce-9f63-85403f950b25)
+3. 
+
+
+
 
 
 ## Contact
