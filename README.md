@@ -126,7 +126,9 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
    ```
 3. Create your user account
    ```
-    $ curl -X POST http://localhost/auth/register -H "Content-Type: application/x-www-form-urlencoded" -d "username=foo&password=Bar2024%21&email=foobar%40gmail%2Ecom"
+    $ curl -X POST http://localhost/auth/register \
+   -H "Content-Type: application/x-www-form-urlencoded" \
+   -d "username=foo&password=Bar2024%21&email=foobar%40gmail%2Ecom"
    ```
    If you have encoded a valid email, along with a password that:
    - minimum eight characters
@@ -147,7 +149,11 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
    ```
    Log in to your account and also retrieve our access tokens. Should return redirect message, if login is successful. An HTML page will be returned with an error message, if the login is unsuccessful. 
    ```
-   $ curl --cookie-jar cookies.txt -X POST http://localhost/auth/login -H "Content-Type: application/x-www-form-urlencoded" -d "username=foo&password=Bar2024%21"
+   $ curl --cookie-jar cookies.txt -X POST http://localhost/auth/login \
+   -H "Content-Type: application/x-www-form-urlencoded" \
+   -d "username=foo&password=Bar2024%21"
+
+   
    <!doctype html>
     <html lang=en>
     <title>Redirecting...</title>
@@ -166,7 +172,10 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
    Keep ahold of these! As we will need them later.
 6. To access our protected root, go to your cookies.txt and copy the unique `access_token_cookie` like so... 
    ```
-   $ curl -b "access_token_cookie=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMjc2MzE5MSwianRpIjoiNzA0YjFmMWUtMzFjNy00NTQ4LWJiMGYtYjNmODdmZGYxZDQwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3MzI3NjMxOTEsImNzcmYiOiJmNzk4NDc5ZS01MTI5LTQ4ZjktYWY4Ni01YjBmNTVlMzU2ODUiLCJleHAiOjE3MzI3NjY3OTF9.YhyOPFxRVGCRaelKgiFdCPKjT0WX1RZAO8tHMOp0Zcc" http://localhost/user/protected
+   $ curl -b "access_token_cookie=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMjc2MzE5MSwianRpIjoiNzA0YjFmMWUtMzFjNy00NTQ4LWJiMGYtYjNmODdmZGYxZDQwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3MzI3NjMxOTEsImNzcmYiOiJmNzk4NDc5ZS01MTI5LTQ4ZjktYWY4Ni01YjBmNTVlMzU2ODUiLCJleHAiOjE3MzI3NjY3OTF9.YhyOPFxRVGCRaelKgiFdCPKjT0WX1RZAO8tHMOp0Zcc" \
+    http://localhost/user/protected
+
+   
     <!DOCTYPE html>
     <html lang="en">
         <head>
@@ -197,7 +206,8 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
    We know we have successfully accessed the protected page, when it has a 'View Profile button' in the response. If the curl command does not feature a valid access token, an error response could be `{"msg":"Missing cookie \"access_token_cookie\""}`
 7.  Updating user data. With POST requests, we also need to include our CSRF Token in our headers. Hence, go to your cookies.txt and copy the unique `access_token_cookie` and `csrf_access_token` like so...
    ```
-    $ curl -X PUT http://localhost/user/update -b "access_token_cookie=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMjc2MzE5MSwianRpIjoiNzA0YjFmMWUtMzFjNy00NTQ4LWJiMGYtYjNmODdmZGYxZDQwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3MzI3NjMxOTEsImNzcmYiOiJmNzk4NDc5ZS01MTI5LTQ4ZjktYWY4Ni01YjBmNTVlMzU2ODUiLCJleHAiOjE3MzI3NjY3OTF9.YhyOPFxRVGCRaelKgiFdCPKjT0WX1RZAO8tHMOp0Zcc" \
+    $ curl -X PUT http://localhost/user/update -b \
+"access_token_cookie=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczMjc2MzE5MSwianRpIjoiNzA0YjFmMWUtMzFjNy00NTQ4LWJiMGYtYjNmODdmZGYxZDQwIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3MzI3NjMxOTEsImNzcmYiOiJmNzk4NDc5ZS01MTI5LTQ4ZjktYWY4Ni01YjBmNTVlMzU2ODUiLCJleHAiOjE3MzI3NjY3OTF9.YhyOPFxRVGCRaelKgiFdCPKjT0WX1RZAO8tHMOp0Zcc" \
 -H "Content-Type: application/x-www-form-urlencoded" -H "X-CSRF-TOKEN:f798479e-5129-48f9-af86-5b0f55e35685" \
 -d "username=foo&email=foobar%40gmail%2Ecoem"
     
@@ -205,14 +215,30 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
    ```
 9.  Querying the LLM Model. This one is really long, so I have put {placeholders} to denote where you should put your token values
    ```
-    $ curl -F 'Job Title=Data Scientist' -F 'Preferred Qualifications=4 years experience machine learning' -F 'Hiring Company=google' \
--F 'Applicant Name=John' -F 'Past Working Experience=Machine Learning Intern at Sony' -F 'Current Working Experience=Analyst at Trello' \
- -F 'Skillsets=python' -F 'Qualifications=BSc in Computer Science' \
+    $ curl -F 'Job Title=Data Scientist' -F 'Preferred Qualifications=4 years experience machine learning' \
+-F 'Hiring Company=google' -F 'Applicant Name=John' -F 'Past Working Experience=Machine Learning Intern at Sony' \
+ -F 'Current Working Experience=Analyst at Trello' -F 'Skillsets=python' \
+-F 'Qualifications=BSc in Computer Science' \
  -H 'Content-Type: multipart/form-data' http://localhost/model/query \
  -b "access_token_cookie={access_token_cookie}" -H "X-CSRF-TOKEN:{csrf_access_token}"
 
 {"modelOutput":"Dear Hiring Manager,\n\nI am writing to express my strong interest in the Data Scientist position at Google, and I believe that my skills and qualifications align perfectly with the requirements of this role.\n\nAs an experienced data scientist with a track record of 4 years of experience in machine learning, I bring a unique perspective on how to apply these skills effectively in a professional setting. My past work experiences include roles as a Machine Learning Intern at Sony, where I honed my abilities in developing and implementing machine learning algorithms; and as an Analyst at Trello, where I utilized my analytical skills to identify trends and opportunities for growth within our company.\n\nIn addition to my technical expertise, I possess excellent communication and collaboration skills, which make me a valuable asset to any team. My passion for data science has led me to pursue further education and certification in Python programming, ensuring that I can continue to develop and enhance my skills in this field.\n\nMy current employment history includes working as an analyst at Trello, where I have consistently contributed to project management and strategic planning. I am confident that my ability to analyze complex data sets and present insights to stakeholders will be a valuable asset to your team.\n\nThank you for considering my application. I look forward to the opportunity to discuss how my background and skills could benefit your organization.\n\nSincerely,\nJohn"}
-   ```
+   ```  
+10.  Delete user  
+    ```
+    $ curl -X DELETE http://localhost/user/delete \
+    -b "access_token_cookie={access_token_cookie}" -H "X-CSRF-TOKEN:{csrf_access_token}"  
+    ```
+12. Log out (redirect response)
+    ```
+    $ curl -X POST http://localhost/auth/logout
+
+    <!doctype html>
+    <html lang=en>
+    <title>Redirecting...</title>
+    <h1>Redirecting...</h1>
+    <p>You should be redirected automatically to the target URL: <a href="/">/</a>. If not, click the link.
+    ```
 
 ## Webapp GUI Walkthrough 
 1. Connect to the Flask webapp via the method specified for your specific method of deploying (ie, http://localhost/ for Kubernetes)
