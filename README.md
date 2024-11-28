@@ -100,7 +100,38 @@ Docker Compose was used as part of the development process for proof of concept 
    ```
 3. Run the shell script 
    ```
-    ./deploy-in-docker-compose.sh 
+    ./deploy-in-docker-compose.sh
+
+   ***5CCSACCA ~ Avis Fung k23036967 avis.cl.fung@kcl.ac.uk***
+    ***DOCKER COMPOSE DEPLOYMENT***
+    
+    ***Please wait container model_server to be loaded before connecting to the flask app***
+    ***Flask app can be connected via all 0.0.0.0 address via port 5000***
+    
+    
+    [+] Building 1.1s (23/23) FINISHED                                                           docker:desktop-linux
+     => [model_server internal] load build definition from Dockerfile                                            0.0s
+     => => transferring dockerfile: 264B                                                                         0.0s
+   ...
+   ...
+   ...
+
+    flask_db      | 2024-11-28 05:09:00.262 UTC [28] LOG:  database system was shut down at 2024-11-27 18:15:26 UTC   
+    flask_db      | 2024-11-28 05:09:00.277 UTC [1] LOG:  database system is ready to accept connections
+    flask_app     |  * Serving Flask app 'app'
+    flask_app     |  * Debug mode: off
+    flask_app     | WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.                                                                                              
+    flask_app     |  * Running on all addresses (0.0.0.0)
+    flask_app     |  * Running on http://127.0.0.1:5000                                                               
+    flask_app     |  * Running on http://172.21.0.4:5000
+    flask_app     | Press CTRL+C to quit                                                                              
+    model_server  | ***Qwen2.5-0.5B-Instruct Model Loaded in Locally***
+    model_server  | ***Qwen2.5-0.5B-Instruct LLM model Initalised***
+    model_server  | INFO:     Started server process [1]                                                              
+    model_server  | INFO:     Waiting for application startup.
+    model_server  | INFO:     Application startup complete.
+    model_server  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)                           
+                                                      
    ```
 4. WAIT until the container `model_server` has finished it's application startup, and connect to the webapp via one of the addresses `flask_app` is currently running on.
 
