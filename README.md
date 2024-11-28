@@ -38,6 +38,7 @@ Docker Compose was used as part of the development process for proof of concept 
    ```
    git clone https://github.com/5CCSACCA/coursework-Av1sF.git
    ```
+   Then you can either deploy with [kubernetes](#deploying-with-kind-kubernetes) or [Docker Compose](#deploying-with-docker-compose)
 
 ## Deploying with Kind Kubernetes 
 1. Ensure you are currently in the project directory 
@@ -48,7 +49,7 @@ Docker Compose was used as part of the development process for proof of concept 
    ```
    chmod -R 777 ./
    ```
-3. Run the shell script 
+3. Run the shell script
    ```
     ./deploy-in-k8s.sh 
    ```
@@ -104,6 +105,7 @@ Docker Compose was used as part of the development process for proof of concept 
 4. WAIT until the container `model_server` has finished it's application startup, and connect to the webapp via one of the addresses `flask_app` is currently running on.
 
 # Usage 
+Consist of 3 main parts: [cURL Walkthrough](#curl-walkthrough), [Webapp GUI Walkthrough](#webapp-gui-walkthrough) and [Kubernetes Metrics Commands](#kubernetes-metrics-commands)
 ## cURL Walkthrough 
 In this walkthrough, I will be using the Kubernetes deployment so the URL will be 'localhost'. If you are using Docker Compose deployment, the URL should be listed in `flask_app` container logs (ie. http://127.0.0.1:5000).
 1. Retrieve main landing page. It should return index.html. 
@@ -264,6 +266,35 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
     ![image](https://github.com/user-attachments/assets/41330f6f-75b9-48cc-867b-d1260b7339f7)
 
 
+## Kubernetes Metrics Commands 
+As the metrics server is automatically deployed in the cluster, it can be used for monitoring. Here are some useful commands!  
+```
+$ kubectl top node
+NAME                     CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
+cloud-cw-control-plane   397m         3%     2228Mi          14%  
+```
+```
+$ kubectl top pod -A
+NAMESPACE            NAME                                             CPU(cores)   MEMORY(bytes)   
+default              flask-555849dd57-4p6gq                           1m           50Mi
+default              flask-555849dd57-fz5g6                           1m           53Mi
+default              llm-model-7fd4ddb5bd-g8xkj                       4m           584Mi
+default              postgres-6b5f7d7849-wk22n                        1m           36Mi
+ingress-nginx        ingress-nginx-controller-5f4f4d9787-n8jd6        4m           149Mi
+kube-system          coredns-7c65d6cfc9-5j2v9                         5m           20Mi
+kube-system          coredns-7c65d6cfc9-gvs9x                         6m           19Mi
+kube-system          etcd-cloud-cw-control-plane                      62m          51Mi
+kube-system          kindnet-rrfsb                                    2m           15Mi
+kube-system          kube-apiserver-cloud-cw-control-plane            102m         220Mi
+kube-system          kube-controller-manager-cloud-cw-control-plane   49m          60Mi
+kube-system          kube-proxy-q2mwb                                 2m           21Mi
+kube-system          kube-scheduler-cloud-cw-control-plane            9m           23Mi
+kube-system          metrics-server-56d84f4d65-7c99f                  8m           30Mi
+local-path-storage   local-path-provisioner-57c5987fd4-k79c4          2m           14Mi
+```
+```
+$ kubectl describe node
+```
    
 
 
