@@ -31,7 +31,7 @@ Docker Compose was used as part of the development process for proof of concept 
 - [Kind]("https://kind.sigs.k8s.io/docs/user/quick-start")
 - [Kubectl]("https://kubernetes.io/docs/tasks/tools/")
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  Docker Desktop allows for an efficient GUI, it also installs Docker and Docker Compose together to remove the hassle of installing it seperately. If you choose to deploy the application via Kubernetes, there is no need for Docker Compose. Hence, you could choose to download Docker as a standalone [here](https://docs.docker.com/engine/install/). 
+  Docker Desktop allows for an efficient GUI, it also installs Docker and Docker Compose together to remove the hassle of installing it seperately. If you choose to deploy the application via Kubernetes, there is no need for Docker Compose. Hence, you could choose to download Docker as a standalone [here](https://docs.docker.com/engine/install/) along with the [Docker Compose plugin](https://docs.docker.com/compose/install/linux/). 
 
 ## Installation on Linux 
 1. Clone the repo 
