@@ -51,7 +51,7 @@ Docker Compose was used as part of the development process for proof of concept 
    ```
 3. Run the shell script
    ```
-    ./deploy-in-k8s.sh 
+    sudo ./deploy-in-k8s.sh 
    ```
 4. Once the shell script has finished running you should be able to connect to the application via a browser with http://localhost/. Here is a snippet of what the first and last few lines of output should be from the script.
    ```
