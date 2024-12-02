@@ -37,13 +37,14 @@ kubectl apply -f ./k8/model-deployment.yml
 # wait until model-server pod's status is Running 
 kubectl wait --for=jsonpath='{.status.phase}'=Running pod/$(kubectl get pod -l app=llm-model -o jsonpath="{.items[0].metadata.name}") --timeout=300s
 # wait until the pod's logs show that the model has been downloaded and initalised
+# ensures that flask application cannot be deployed without the model-server 
 until kubectl logs $(kubectl get pod -l app=llm-model -o jsonpath="{.items[0].metadata.name}")| grep -m 1 "***Qwen2.5-0.5B-Instruct LLM model Initalised***" ; do sleep 1 ; done
 
 printf '\n\n***Deploying Flask Server in Cluster***\n'
 kubectl apply -f ./k8/flask-deployment.yml  
 # wait until flask pod's status is running 
 kubectl wait --for=jsonpath='{.status.phase}'=Running pod/$(kubectl get pod -l app=flask -o jsonpath="{.items[0].metadata.name}") --timeout=300s
-# # wait until the pod's logs show that the flask startup is completed 
+# wait until the pod's logs show that the flask startup is completed 
 until kubectl logs $(kubectl get pod -l app=flask -o jsonpath="{.items[0].metadata.name}")| grep -m 1 "* Serving Flask app 'app'" ; do sleep 1 ; done
 
 printf '\n\n\n***Deploying Ingress Resource Definition***\n'
@@ -52,7 +53,6 @@ kubectl apply -f ./k8/ingress.yml
 printf '\n\n***Kubernetes Metrics Server for Kind***\n'
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.5.0/components.yaml
 kubectl patch deployment metrics-server -n kube-system --patch "$(cat ./k8/metric-server-patch.yml)"
-
 
 printf '\n\n\n*** You can now connect to the webapp through http://localhost/ ***\n'
 printf '*** To delete cluster: kind delete cluster --name cloud-cw ***\n'
