@@ -31,7 +31,7 @@ Docker Compose was used as part of the development process for proof of concept 
 - [Kind]("https://kind.sigs.k8s.io/docs/user/quick-start")
 - [Kubectl]("https://kubernetes.io/docs/tasks/tools/")
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-  Docker Desktop allows for an efficient GUI, it also installs Docker and Docker Compose together to remove the hassle of installing it seperately. If you choose to deploy the application via Kubernetes, there is no need for Docker Compose. Hence, you could choose to download Docker as a standalone [here](https://docs.docker.com/engine/install/). 
+  Docker Desktop allows for an efficient GUI, it also installs Docker and Docker Compose together to remove the hassle of installing it seperately. If you choose to deploy the application via Kubernetes, there is no need for Docker Compose. Hence, you could choose to download Docker as a standalone [here](https://docs.docker.com/engine/install/) along with the [Docker Compose plugin](https://docs.docker.com/compose/install/linux/). 
 
 ## Installation on Linux 
 1. Clone the repo 
@@ -41,21 +41,21 @@ Docker Compose was used as part of the development process for proof of concept 
    Then you can either deploy with [kubernetes](#deploying-with-kind-kubernetes) or [Docker Compose](#deploying-with-docker-compose)
 
 ## Deploying with Kind Kubernetes 
-1. Ensure you are currently in the project directory 
+1. Ensure you are currently in the project directory and docker is running. 
    ```
-   cd ./path/to/project/dir/coursework-Av1sF
+   cd ./path/to/project/dir/coursework-Av1sF-main
    ```
-2. Make sure that you have execute permissions for `deploy-in-k8s.sh` and all yaml files in the `k8` directory. You can change all the files in the project directory have all permissions types with this command below. 
+2. Make sure that you have execute permissions for `deploy-in-k8s.sh` and all yaml files in the `k8` directory. You can change all the files in the project directory have all permissions types with this command below. Use sudo if needed otherwise leave it out. 
    ```
    chmod -R 777 ./
    ```
 3. Run the shell script
    ```
-    ./deploy-in-k8s.sh 
+   ./deploy-in-k8s.sh 
    ```
-4. Once the shell script has finished running you should be able to connect to the application via a browser with http://localhost/. Here is a snippet of what the first and last few lines of output should be from the script.
+4. Once the shell script has finished running you should be able to connect to the application via a browser with http://localhost/. Here is a snippet of what the first and last few lines of output should be from the script. 
    ```
-   $ sh deploy-in-k8s.sh
+   $ sudo ./deploy-in-k8s.sh
     ***5CCSACCA ~ Avis Fung k23036967 avis.cl.fung@kcl.ac.uk***
     ***KUBERNETES DEPLOYMENT***
     
@@ -90,17 +90,17 @@ Docker Compose was used as part of the development process for proof of concept 
    ```
 
 ## Deploying with Docker Compose 
-1. Ensure you are currently in the project directory 
+1. Ensure you are currently in the project directory and Docke compose is running. 
    ```
    cd ./path/to/project/dir/coursework-Av1sF
    ```
-2. Make sure that you have execute permissions for `deploy-in-docker-compose.sh` and all Docker files. You can change all the files in the project directory have all permissions types with this command below. 
+2. Make sure that you have execute permissions for `deploy-in-docker-compose.sh` and all Docker files. You can change all the files in the project directory have all permissions types with this command below. Use sudo if needed otherwise leave it out. 
    ```
    chmod -R 777 ./
    ```
 3. Run the shell script 
    ```
-    ./deploy-in-docker-compose.sh
+   ./deploy-in-docker-compose.sh
 
    ***5CCSACCA ~ Avis Fung k23036967 avis.cl.fung@kcl.ac.uk***
     ***DOCKER COMPOSE DEPLOYMENT***
@@ -298,7 +298,18 @@ In this walkthrough, I will be using the Kubernetes deployment so the URL will b
 
 
 ## Kubernetes Metrics Commands 
-As the metrics server is automatically deployed in the cluster, it can be used for monitoring. Here are some useful commands!  
+As the metrics server is automatically deployed in the cluster, it can be used for monitoring. Use sudo if needed otherwise leave it out. Here are some useful commands!  
+```
+$ kubectl logs {pod_name}
+```
+```
+$ kubectl get pods
+NAME                         READY   STATUS    RESTARTS   AGE
+flask-555849dd57-bgmz7       1/1     Running   0          164m
+flask-555849dd57-bt4xg       1/1     Running   0          164m
+llm-model-7fd4ddb5bd-zplkw   1/1     Running   0          165m
+postgres-6b5f7d7849-9jvlv    1/1     Running   0          170m
+```
 ```
 $ kubectl top node
 NAME                     CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%   
@@ -326,16 +337,9 @@ local-path-storage   local-path-provisioner-57c5987fd4-k79c4          2m        
 ```
 $ kubectl describe node
 ```
-   
-
-
-
-
-
-
-
-
-
+```
+$ docker stats 
+```
 
 
 ## Contact

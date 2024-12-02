@@ -12,7 +12,8 @@ services:
       - JWT_SECRET_KEY=321dg4nt4h5432!
       - MODEL_URI=http://model_server:8000
     depends_on:
-      - flask_db
+      flask_db:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -32,6 +33,12 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_DB=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres -U postgres" ]
+      interval: 30s
+      timeout: 60s
+      retries: 10
+      start_period: 80s  
     volumes:
       - pgdata:/var/lib/postgresql/data
     deploy:
