@@ -36,14 +36,14 @@ Docker Compose was used as part of the development process for proof of concept 
 ## Installation on Linux 
 1. Clone the repo 
    ```
-   git clone https://github.com/5CCSACCA/coursework-Av1sF.git
+   git clone https://github.com/Av1sF/llm-cover-letter-writer-webapp.git
    ```
    Then you can either deploy with [kubernetes](#deploying-with-kind-kubernetes) or [Docker Compose](#deploying-with-docker-compose)
 
 ## Deploying with Kind Kubernetes 
 1. Ensure you are currently in the project directory and docker is running. 
    ```
-   cd ./path/to/project/dir/coursework-Av1sF-main
+   cd ./path/to/project/dir/llm-cover-letter-writer-webapp-main
    ```
 2. Make sure that you have execute permissions for `deploy-in-k8s.sh` and all yaml files in the `k8` directory. You can change all the files in the project directory have all permissions types with this command below. Use sudo if needed otherwise leave it out. 
    ```
@@ -92,7 +92,7 @@ Docker Compose was used as part of the development process for proof of concept 
 ## Deploying with Docker Compose 
 1. Ensure you are currently in the project directory and Docke compose is running. 
    ```
-   cd ./path/to/project/dir/coursework-Av1sF
+   cd ./path/to/project/dir/llm-cover-letter-writer-webapp
    ```
 2. Make sure that you have execute permissions for `deploy-in-docker-compose.sh` and all Docker files. You can change all the files in the project directory have all permissions types with this command below. Use sudo if needed otherwise leave it out. 
    ```
